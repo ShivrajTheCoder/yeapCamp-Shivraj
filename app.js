@@ -1,3 +1,9 @@
+if(process.env.NODE_ENV!== "production"){
+    require("dotenv").config();
+}
+
+// console.log(process.env.CLOUDINARY_CLOUD_NAME);
+
 const express=require("express");
 const app=express();
 const path=require("path");
@@ -7,6 +13,9 @@ const flash=require("connect-flash");
 const passport=require("passport");
 const LocalStrategy=require("passport-local");
 const User=require("./models/user");
+const mongoSanitize = require('express-mongo-sanitize');
+
+
 
 const Campground=require("./models/campground");
 const methodOverride=require("method-override");
@@ -32,6 +41,7 @@ async function main() {
     await mongoose.connect('mongodb://localhost:27017/yelp-camp', { useNewUrlParser: true, useUnifiedTopology: true});
 }
 
+
 //middlewares
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
@@ -44,7 +54,9 @@ const sessionConfig={
     resave:false,
     saveUninitialized:true,
     cookie:{
+        name:"session",//no using the default name i.e session_id
         httpOnly:true,// for security must read more on this
+        // secure:true, will only work on https local host is not secure
         expires: Date.now()+1000*60*60*24*7, // setting expiry date of one week
         maxAge:1000*60*60*24*7
     }
@@ -65,6 +77,9 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
+app.use(mongoSanitize({
+    replaceWith: '_'
+}))
 
 
 app.use((req,res,next)=>{

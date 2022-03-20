@@ -4,7 +4,7 @@
     <div class="row">
         <h1 class="text-center">Edit Campground</h1>
         <div class="col-6 offset-3">
-            <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST" novalidate class="validated-form">
+            <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
                 <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
                 <input type="text" class="form-control" id="title" value="<%=campground.title%>" name="campground[title]" required>
@@ -23,12 +23,22 @@
                   </div>
                 </div>
                 <div class="mb-3">
-                <label for="image" class="form-label">Image url</label>
-                <input type="text" id="image" class="form-control" value="<%=campground.image%>" name="campground[image]" required>
+                <label for="image" class="form-label">add Images</label>
+                <input type="file" name="image" id="image" multiple>
                 </div>
                 <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
                 <textarea type="text" id="description" class="form-control" name="campground[description]" required>value="<%=campground.description%>"</textarea> 
+                </div>
+                <div class="mb-3">
+                    <h1>Images</h1>
+                    <% campground.images.forEach(function(img,i){ %>
+                        <img src="<%=img.thumbnail%>" class="img-thumbnail" alt="">
+                        <div class="form-check-inline">
+                            <input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%= img.filename %>">
+                        </div>
+                        <label for="image-<%=i%>">Delete?</label>
+                    <%}) %> 
                 </div>
                 <div class="mb-3">
                 <button class="btn btn-info">Save Edit</button>

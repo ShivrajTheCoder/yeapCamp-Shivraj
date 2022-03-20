@@ -24,7 +24,7 @@ const seedDb=async ()=>{
 
     //adding 50 cities to the database for usage in the app
 
-    for(let i=0;i<50;i++)
+    for(let i=0;i<200;i++)
     {
         const random1000=Math.floor(Math.random()*1000)
         const price=Math.floor(Math.random()*500)
@@ -32,9 +32,25 @@ const seedDb=async ()=>{
             title:`${sample(descriptors)} ${sample(places)}`,
             author:"6234c7ed340ef47d8638d3cc",
             location:`${cities[random1000].city},${cities[random1000].state}`,
-            image:`https://source.unsplash.com/1600x900/?camping`,
             description:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit ipsum voluptas, soluta esse doloribus architecto delectus, ex nesciunt commodi nihil cumque tenetur at quasi natus vel, fugiat ipsa accusamus earum.",
-            price
+            price,
+            geometry : { 
+                "type" : "Point",
+                 "coordinates" : [ 
+                     cities[random1000].longitude,
+                     cities[random1000].latitude
+                  ] 
+                },
+            images: [
+                {
+                  url: 'https://res.cloudinary.com/dzd53baqf/image/upload/v1647760433/YelpCamp/izfgaqtzid04kix4swkv.png',
+                  filename: 'YelpCamp/izfgaqtzid04kix4swkv',
+                },
+                {
+                  url: 'https://res.cloudinary.com/dzd53baqf/image/upload/v1647760434/YelpCamp/atqmx7qszjihiyy9oj99.jpg',
+                  filename: 'YelpCamp/atqmx7qszjihiyy9oj99',
+                }
+              ]
         })
         await newCamp.save();
     }
